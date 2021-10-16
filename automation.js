@@ -52,10 +52,20 @@ async function run(){
 
     await page.waitForSelector(`a[href="/administration/contests/"]`);
     await page.click(`a[href="/administration/contests/"]`);
-    // console.log()
-   // let contestLinks = page.evaluate
+
+    /*
+        `TODO`
+
+    --> Scrape all links on contest (All pages)
+    --> save them in a file or in a list
+    --> iterate and perform moderator add 
+
+    */
+
+
+
+
     // await browser.close();
   }
-
   run();
 
