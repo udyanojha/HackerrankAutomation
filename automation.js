@@ -64,6 +64,10 @@ async function run(){
     
     for(let i = 1; i<=numPages; i++){
         await handleAllPagesOfContest(page,browser);
+        if(i!= numPages){
+            await page.waitForSelector("a[data-attr1='Right']");
+            await page.click("a[data-attr1='Right']");
+        }
         
     }
 
@@ -77,9 +81,31 @@ async function run(){
             }
             return urls;
         });
+        console.log(curls);
+        await page.waitFor(1000);
+        for(let i = 0; i<curls.length; i++){
+            let newTab = await browser.newPage();
+            await saveModInContest(newTab, args.url+curls[i], configJSO.moderator);
+            await newTab.close();
+            await page.waitFor(1000);
+        }
 
         
 
+    }
+    async function saveModInContest(newTab, curl, mod){
+        await newTab.goto(curl);
+        await newTab.waitFor(3000);
+        await newTab.waitForSelector(`li[data-tab="moderators"]`);
+        await newTab.click(`li[data-tab="moderators"]`);
+        
+        await newTab.waitForSelector(`input#moderator`);
+        await newTab.click(`input#moderator`);
+        await newTab.keyboard.type(mod,{
+            delay:30
+        });
+        await newTab.click(`button.moderator-save`);
+        await newTab.waitFor(1000);
     }
 
     /*
