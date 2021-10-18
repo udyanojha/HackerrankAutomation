@@ -93,32 +93,23 @@ async function run(){
         
 
     }
+    // function to add all the moderators available
     async function saveModInContest(newTab, curl, mod){
         await newTab.goto(curl);
         await newTab.waitFor(3000);
         await newTab.waitForSelector(`li[data-tab="moderators"]`);
         await newTab.click(`li[data-tab="moderators"]`);
-        
+        for(let i = 0; i<mod.length; i++){
         await newTab.waitForSelector(`input#moderator`);
         await newTab.click(`input#moderator`);
-        await newTab.keyboard.type(mod,{
+        await newTab.keyboard.type(mod[i],{
             delay:30
         });
+        await newTab.waitFor(1100);
         await newTab.click(`button.moderator-save`);
-        await newTab.waitFor(1000);
+        await newTab.waitFor(500);
+        }
     }
-
-    /*
-        `TODO`
-
-    --> Scrape all links on contest (All pages)
-    --> save them in a file or in a list
-    --> iterate and perform moderator add 
-
-    */
-
-
-
 
     // await browser.close();
   }
