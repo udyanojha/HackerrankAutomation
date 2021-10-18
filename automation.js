@@ -35,7 +35,9 @@ async function run(){
 
     await page.waitForSelector(`input[name="username"]`);
     await page.click(`input[name="username"]`);
-    await page.keyboard.type(userid);
+    await page.keyboard.type(userid, {
+        delay:30
+    });
     
     await page.waitForSelector(`input[name="password"]`);
     await page.click(`input[name="password"]`);
@@ -52,6 +54,33 @@ async function run(){
 
     await page.waitForSelector(`a[href="/administration/contests/"]`);
     await page.click(`a[href="/administration/contests/"]`);
+
+    await page.waitForSelector(`a[data-attr1="Last"]`);
+    // console.log("done");
+    let numPages = await page.$eval(`a[data-attr1="Last"]`, function (atag) {
+        let totPages = parseInt(atag.getAttribute("data-page"));
+        return totPages;
+    });
+    
+    for(let i = 1; i<=numPages; i++){
+        await handleAllPagesOfContest(page,browser);
+        
+    }
+
+    async function handleAllPagesOfContest(page, browser){
+        await page.waitForSelector("a.backbone.block-center");
+        let curls = await page.$$eval("a.backbone.block-center",function(atags){
+            let urls = [];
+            for(let i = 0; i<atags.length; i++){
+                let url = atags[i].getAttribute("href");
+                urls.push(url);
+            }
+            return urls;
+        });
+
+        
+
+    }
 
     /*
         `TODO`
